@@ -212,11 +212,11 @@ export function PointerRow({
 function ColorLegend({ items }: { items: LegendItem[] }) {
   return (
     <ul
-      className="flex shrink-0 flex-nowrap gap-x-2 overflow-hidden pt-3 text-[11px] whitespace-nowrap text-foreground/80 @sm:gap-x-3 @sm:text-xs @lg:gap-x-5 @lg:text-sm"
+      className="flex shrink-0 flex-wrap gap-x-2 gap-y-1 pt-3 text-[11px] text-foreground/80 @sm:gap-x-3 @sm:text-xs @lg:gap-x-5 @lg:text-sm"
       aria-label="Colour legend"
     >
       {items.map(({ kind, label }) => (
-        <li key={label} className="flex items-center gap-1.5 @lg:gap-2">
+        <li key={label} className="flex items-center gap-1.5 whitespace-nowrap @lg:gap-2">
           <span className="size-2.5 rounded-[3px] @sm:size-3 @lg:size-3.5" style={{ backgroundColor: vizColor(kind) }} />
           {label}
         </li>
@@ -238,7 +238,7 @@ function IndexRow({ n }: { n: number }) {
   );
 }
 
-export function ArrayBars({ step, duration, compact }: RendererProps<ArrayState | SlotArrayState>) {
+export function ArrayBars({ step, duration, compact, dense }: RendererProps<ArrayState | SlotArrayState>) {
   const state = step.state;
   if ("slots" in state) {
     const { slots, pointers } = state;
@@ -279,8 +279,8 @@ export function ArrayBars({ step, duration, compact }: RendererProps<ArrayState 
         target={target}
         outlined={outlined}
       />
-      {pointers && !compact && <PointerRow pointers={pointers} n={items.length} duration={duration} notes={pointerNotes} pointerKinds={pointerKinds} />}
-      {legend && !compact && <ColorLegend items={legend} />}
+      {pointers && !compact && <PointerRow pointers={pointers} n={items.length} duration={duration} notes={dense ? undefined : pointerNotes} pointerKinds={pointerKinds} />}
+      {legend && !compact && !dense && <ColorLegend items={legend} />}
     </div>
   );
 }
